@@ -6,15 +6,30 @@ const connectDB = require('./config/database');
 const authRoutes = require('./routes/authRoutes');
 const gameRoutes = require('./routes/gameRoutes');
 const tweetRoutes = require('./routes/tweetRoutes');
+const cors = require('cors');
+const session = require('express-session');
+const passport =  require('./config/passport');  
+
+
 
 const app = express();
 
 // Connect Database
 connectDB();
+app.use(cors());
 
 // Middleware
 app.use(express.json());
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET || 'your-secret-key',
+        resave: false,
+        saveUninitialized: true,
+    })
+);
 
+app.use(passport.initialize());
+app.use(passport.session());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/game', gameRoutes);
