@@ -35,8 +35,8 @@ exports.twitterAUthenticate = async (req, res,next) => {
 exports.twitterCallback = async (req, res) => {
     try {
         await passport.authenticate('twitter', {session:false},{
-            successRedirect: `${process.env.FRONTENT_URL}/`,
-            failureRedirect: `${process.env.FRONTENT_URL}/`
+            successRedirect: `${process.env.FRONTEND_URL}/`,
+            failureRedirect: `${process.env.FRONTEND_URL}/`
         })(req, res);
     } catch (error) {
         console.log("error",error);
