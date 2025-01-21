@@ -28,16 +28,24 @@ exports.twitterAUthenticate = (req, res, next) => {
 };
 
 
-exports.twitterCallback = async (req, res) => {
-    try {
-        await passport.authenticate('twitter', {session:false},{
-            successRedirect: `${process.env.FRONTEND_URL}/`,
-            failureRedirect: `${process.env.FRONTEND_URL}/`
-        })(req, res);
-    } catch (error) {
-        console.log("error",error);
-    }
-};
+exports.twitterCallback = (req, res, next) => {
+    passport.authenticate('twitter', { session: false }, (err, user, info) => {
+      if (err || !user) {
+        return res.redirect(`${process.env.FRONTEND_URL}/`);
+      }
+  
+      // Log the user in if necessary
+      req.logIn(user, { session: false }, (loginErr) => {
+        if (loginErr) {
+          return res.status(500).json({ message: 'Login failed' });
+        }
+  
+        // Redirect or return a response
+        res.redirect(`${process.env.FRONTEND_URL}/`);
+      });
+    })(req, res, next);
+  };
+  
 
 
 
