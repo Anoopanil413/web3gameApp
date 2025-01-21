@@ -16,8 +16,13 @@ const app = express();
 
 // Connect Database
 connectDB();
-app.use(cors());
-
+app.use(
+    cors({
+      origin: process.env.FRONTEND_URL, // Replace with your frontend URL
+      methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+      credentials: true, // Allow cookies and authorization headers
+    })
+  );
 // Middleware
 app.use(express.json());
 app.use(
