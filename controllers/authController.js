@@ -22,15 +22,11 @@ exports.authenticate = async (req, res) => {
     }
 };
 
-exports.twitterAUthenticate = async (req, res,next) => {
-    try {
-        console.log("reached twiteer")
-         await passport.authenticate('twitter',{session:false})(req, res,next);
+exports.twitterAUthenticate = (req, res, next) => {
+    console.log("Initiating Twitter Authentication");
+    passport.authenticate('twitter', { session: false })(req, res, next);
+};
 
-}catch(error){
-    console.log("error",error);
-}
-}
 
 exports.twitterCallback = async (req, res) => {
     try {
