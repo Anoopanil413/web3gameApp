@@ -24,6 +24,7 @@ exports.authenticate = async (req, res) => {
 
 exports.twitterAUthenticate = async (req, res,next) => {
     try {
+        console.log("reached twiteer")
          await passport.authenticate('twitter',{session:false})(req, res,next);
 
 }catch(error){
