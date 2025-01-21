@@ -16,10 +16,9 @@
  exports.twitterConfig = {
     consumerKey: process.env.TWITTER_API_KEY,
     consumerSecret: process.env.TWITTER_API_SECRET,
-    clientID: process.env.TWITTER_CLIENT_ID,
-    clientSecret: process.env.TWITTER_CLIENT_SECRET,
     callbackURL: process.env.TWITTER_CALLBACK_URL,
-    scope: ['tweet.read', 'users.read', 'offline.access']
+    // clientSecret: process.env.TWITTER_CLIENT_SECRET,
+    // scope: ['tweet.read', 'users.read', 'offline.access']
   };
 
  
