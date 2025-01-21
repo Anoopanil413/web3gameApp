@@ -22,7 +22,7 @@ passport.use(
     async (token, tokenSecret, profile, done) => {
       try {
         let user = await User.findOne({ twitterId: profile.id });
-        console.log("username eeeee",user);
+        console.log(profile,"username eeeee",user);
 
         if (!user) {
           user = await User.create({

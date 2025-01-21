@@ -17,6 +17,7 @@
     consumerKey: process.env.TWITTER_API_KEY,
     consumerSecret: process.env.TWITTER_API_SECRET,
     callbackURL: process.env.TWITTER_CALLBACK_URL,
+    includeEmail: true,
     // clientSecret: process.env.TWITTER_CLIENT_SECRET,
     // scope: ['tweet.read', 'users.read', 'offline.access']
   };
