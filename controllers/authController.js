@@ -33,16 +33,12 @@ exports.twitterCallback = (req, res, next) => {
       if (err || !user) {
         return res.redirect(`${process.env.FRONTEND_URL}/`);
       }
-  
-      // Log the user in if necessary
-      req.logIn(user, { session: false }, (loginErr) => {
+        req.logIn(user, { session: false }, (loginErr) => {
         if (loginErr) {
           return res.status(500).json({ message: 'Login failed' });
         }
-  
-        // Redirect or return a response
-        res.redirect(`${process.env.FRONTEND_URL}/`);
-      });
+        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '30d' });
+        res.redirect(`${process.env.FRONTEND_URL}/?token=${token}`); });
     })(req, res, next);
   };
   
