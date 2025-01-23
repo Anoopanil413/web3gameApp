@@ -10,7 +10,6 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
   try {
     const user = await User.findById(id);
-    console.log("user in deserilize",user);
     done(null, user);
   } catch (error) {
     done(error, null);
@@ -22,7 +21,6 @@ passport.use(
     async (token, tokenSecret, profile, done) => {
       try {
         let user = await User.findOne({ twitterId: profile.id });
-        console.log(profile,"username eeeee",user);
 
         if (!user) {
           user = await User.create({
