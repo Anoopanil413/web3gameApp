@@ -38,6 +38,7 @@ exports.twitterCallback = (req, res, next) => {
           return res.status(500).json({ message: 'Login failed' });
         }
         const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '30d' });
+        console.log(process.env.FRONTEND_URL,"Redirecting to frontend with token",token);
         res.redirect(`${process.env.FRONTEND_URL}/?token=${token}`); });
     })(req, res, next);
   };
