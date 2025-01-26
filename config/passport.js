@@ -33,6 +33,7 @@ passport.use(
             twitterTokenSecret: tokenSecret
           });
         }
+        console.log("User",user);
 
         return done(null, user);
       } catch (error) {
