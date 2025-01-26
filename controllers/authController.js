@@ -30,6 +30,7 @@ exports.twitterAUthenticate = (req, res, next) => {
 
 exports.twitterCallback = (req, res, next) => {
     passport.authenticate('twitter', { session: false }, (err, user, info) => {
+      console.log("err, user, info",err, user, info);
       if (err || !user) {
         return res.redirect(`${process.env.FRONTEND_URL}/`);
       }
