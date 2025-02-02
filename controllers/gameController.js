@@ -28,12 +28,17 @@ exports.generateClaimLink = async (req, res) => {
 
 exports.getLeaderboard = async (req, res) => {
   try {
-    const leaderboard = await Leaderboard.find()
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const leaderboard = await Leaderboard.find({ claimedAt: { $gte: startOfDay } })
       .sort({ score: -1 })
       .limit(10)
-      .select("user score claimStatus");
+      .populate('user', ['username', 'profileImage'])
+      .select('user score');
     res.status(200).json(leaderboard);
   } catch (err) {
+    console.log(err);
     res.status(500).json({ error: "Server error" });
   }
 };
