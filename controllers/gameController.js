@@ -429,7 +429,7 @@ exports.claimScores = async (req, res) => {
         message: `Please wait ${remainingTime} minutes before claiming points again`,
       });
     }
-
+    console.log("user",user)
     // Check if user has Twitter tokens
     if (!user.twitterToken || !user.twitterTokenSecret) {
       return res.status(400).json({
@@ -446,39 +446,44 @@ exports.claimScores = async (req, res) => {
       accessSecret: user.twitterTokenSecret,
     });
 
-    // Post tweet with retry logic
     let tweet;
-    let retryCount = 0;
-    const maxRetries = 3;
+let retryCount = 0;
+const maxRetries = 3;
 
-    while (retryCount < maxRetries) {
-      try {
-        // Using v2 API to create tweet
-        const uniqueId = new Date().getTime(); // Generate a unique ID based on the current timestamp
+while (retryCount < maxRetries) {
+  try {
+    const uniqueId = new Date().getTime(); // Generate a unique ID based on the current timestamp
         const response = await twitterClient.v2.tweet(
-          `I have won ${score.score} #seifshunt points and part of everyday $sei #airdrop fun. Play #seifshunt and claim your free #airdropped $seifs using my referral. Join the best sei meme game here : https://cyberfox.netlify.app #SeiDeFi #SeiEcosystem #SeiCommunity #SeiTrading #SeiMemes #captainSeifs $sei $seifs #dragonswap #Bullrun2025 #Giveaway #GiveawayAlert #giveawayUSER #Bullrun2025 #seifshunt #Airdrop #Airdrops #AirdropAlert #AirdropCrypto #airdropcampaign #newairdrop #seiairdrop #airdropfarm #memecoin1000x #seimemes #SEI #SEIFS #SeiSwap ${uniqueId}`
+          `I have won ${score.score} #seifshunt points and part of everyday $sei #airdrop fun. Play #seifshunt and claim your free #airdropped $seifs using my referral. Join the best sei meme game here : cyberfox.app #SeiDeFi #SeiEcosystem #SeiCommunity #SeiTrading #SeiMemes #captainSeifs $sei $seifs #dragonswap #Bullrun2025 #Giveaway #GiveawayAlert #giveawayUSER #Bullrun2025 #seifshunt #Airdrop #Airdrops #AirdropAlert #AirdropCrypto #airdropcampaign #newairdrop #seiairdrop #airdropfarm #memecoin1000x #seimemes #SEI #SEIFS #SeiSwap ${uniqueId}`
         );
-        tweet = response.data;
-        break;
-      } catch (twitterError) {
-        console.error("Twitter API Error:", twitterError);
-        console.log("twitterError",twitterError)
-                // If it's a 403 error, assume the token is invalid
-                if (twitterError.code === 403) {
-                  return res.status(404).json({
-                    success: false,
-                    message: "Twitter authentication expired. Please re-login.",
-                  });
-                }
-        
-        retryCount++;
-        if (retryCount === maxRetries) {
-          throw new Error(`Failed to post tweet after ${maxRetries} attempts: ${twitterError.message}`);
-        }
-        // Exponential backoff
-        await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, retryCount)));
-      }
+    tweet = response.data;
+    break;
+  } catch (twitterError) {
+    console.error("Twitter API Error:", twitterError);
+    
+    // Handle authentication error
+    if (twitterError.data?.status === 403) {
+      return res.status(401).json({
+        success: false,
+        message: "Twitter authentication expired. Please re-login.",
+      });
     }
+    
+    // Rate limit handling (429)
+    if (twitterError.data?.status === 429) {
+      console.log("Rate limit exceeded. Retrying after delay...");
+      await new Promise(resolve => setTimeout(resolve, 15000)); // Wait 15s
+    }
+
+    retryCount++;
+    if (retryCount === maxRetries) {
+      throw new Error(`Failed to post tweet after ${maxRetries} attempts: ${twitterError.message}`);
+    }
+    
+    // Exponential backoff (wait 1s, then 2s, then 4s)
+    await new Promise(resolve => setTimeout(resolve, 1000 * Math.pow(2, retryCount)));
+  }
+}
 
     // Get user's Twitter username for the tweet URL
     const meUser = await twitterClient.v2.me();
