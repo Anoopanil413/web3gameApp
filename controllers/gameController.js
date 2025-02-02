@@ -455,9 +455,10 @@ while (retryCount < maxRetries) {
     const uniqueId = new Date().getTime(); // Generate a unique ID based on the current timestamp
     // const text =   `I have won ${score.score} #seifshunt points and part of everyday $sei #airdrop fun. Play #seifshunt and claim your free #airdropped $seifs using my referral. Join the best sei meme game here : cyberfox.app #SeiDeFi #SeiEcosystem #SeiCommunity #SeiTrading #SeiMemes #captainSeifs $sei $seifs #dragonswap #Bullrun2025 #Giveaway #GiveawayAlert #giveawayUSER #Bullrun2025 #seifshunt #Airdrop #Airdrops #AirdropAlert #AirdropCrypto #airdropcampaign #newairdrop #seiairdrop #airdropfarm #memecoin1000x #seimemes #SEI #SEIFS #SeiSwap ${uniqueId}`
   const shortenedtext =  `I have won ${score.score} #seifshunt points and part of everyday $sei #airdrop fun. Play #seifshunt and claim your free #airdropped $seifs using my referral. Join the best sei meme game here : cyberfox.app #SeiDeFi ${uniqueId}`
-   
+  const tweetText = shortenedtext.length <= 280 ? shortenedtext : shortenedtext.slice(0, 277) + '...';
+
     const response = await twitterClient.v2.tweet(
-      shortenedtext
+      tweetText
         );
     tweet = response.data;
     break;
