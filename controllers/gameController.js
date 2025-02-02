@@ -463,7 +463,7 @@ while (retryCount < maxRetries) {
     
     // Handle authentication error
     if (twitterError.data?.status === 403) {
-      return res.status(401).json({
+      return res.status(404).json({
         success: false,
         message: "Twitter authentication expired. Please re-login.",
       });
