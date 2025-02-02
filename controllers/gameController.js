@@ -369,6 +369,8 @@ exports.getUnclaimedScores = async (req, res) => {
     const unclaimedScores = await userScore.find({
       userId: userId,
       claimed: false,
+      status: "completed",
+      score: { $gt: 0 },
     });
     res.status(200).json(unclaimedScores);
   } catch (error) {
