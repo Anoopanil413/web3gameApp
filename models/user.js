@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
     twitterToken: { type: String },
     twitterTokenSecret: { type: String },
     score: { type: Number, default: 0 },
+    lastClaimed: { type: Date },
 });
 
 module.exports = mongoose.model('User', userSchema);

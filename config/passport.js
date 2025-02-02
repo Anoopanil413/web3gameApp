@@ -22,18 +22,21 @@ passport.use(
       try {
         let user = await User.findOne({ twitterId: profile.id });
 
-        if (!user) {
+        if (user) {
+          user.twitterToken = token;
+          user.twitterTokenSecret = tokenSecret;
+          await user.save();
+        } else {
           user = await User.create({
             twitterId: profile.id,
             name: profile.displayName,
             username: profile.username,
-            email: profile.emails[0].value,
-            profileImage: profile.photos[0].value,
+            email: profile.emails?.[0]?.value || "",  
+            profileImage: profile.photos?.[0]?.value || "",
             twitterToken: token,
             twitterTokenSecret: tokenSecret
           });
         }
-        console.log("User",user);
 
         return done(null, user);
       } catch (error) {
