@@ -461,10 +461,10 @@ exports.claimScores = async (req, res) => {
         break;
       } catch (twitterError) {
         console.error("Twitter API Error:", twitterError);
-
+        console.log("twitterError",twitterError)
                 // If it's a 403 error, assume the token is invalid
                 if (twitterError.code === 403) {
-                  return res.status(401).json({
+                  return res.status(404).json({
                     success: false,
                     message: "Twitter authentication expired. Please re-login.",
                   });
