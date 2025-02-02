@@ -454,8 +454,9 @@ exports.claimScores = async (req, res) => {
     while (retryCount < maxRetries) {
       try {
         // Using v2 API to create tweet
+        const uniqueId = new Date().getTime(); // Generate a unique ID based on the current timestamp
         const response = await twitterClient.v2.tweet(
-          `I just achieved a score of ${score.score} in GameName! 🎮`
+          `I have won ${score.score} #seifshunt points and part of everyday $sei #airdrop fun. Play #seifshunt and claim your free #airdropped $seifs using my referral. Join the best sei meme game here : https://cyberfox.netlify.app #SeiDeFi #SeiEcosystem #SeiCommunity #SeiTrading #SeiMemes #captainSeifs $sei $seifs #dragonswap #Bullrun2025 #Giveaway #GiveawayAlert #giveawayUSER #Bullrun2025 #seifshunt #Airdrop #Airdrops #AirdropAlert #AirdropCrypto #airdropcampaign #newairdrop #seiairdrop #airdropfarm #memecoin1000x #seimemes #SEI #SEIFS #SeiSwap ${uniqueId}`
         );
         tweet = response.data;
         break;
